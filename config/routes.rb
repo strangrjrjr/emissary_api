@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :users, only: [:create]
   post '/login', to: 'auth#create'
-  get '/home', to: 'users#show'
+  get '/home', to: 'auth#show'
   
   resources :messages
   resources :conversations
