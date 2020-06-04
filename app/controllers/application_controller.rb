@@ -18,7 +18,6 @@ class ApplicationController < ActionController::API
                 begin
                     # CHANGE SECRET AND REMOVE TO ENV BEFORE PRODUCTION
                     JWT.decode(token, 'secret', true, algorithm: 'HS256')
-                    # JWT.decode => [{ "beef"=>"steak" }, { "alg"=>"HS256" }]
                 rescue JWT::DecodeError
                     nil
                 end
@@ -27,8 +26,6 @@ class ApplicationController < ActionController::API
 
     def current_user
         if decoded_token
-          # decoded_token=> [{"user_id"=>2}, {"alg"=>"HS256"}]
-          # or nil if we can't decode the token
           user_id = decoded_token[0]['user_id']
           @user = User.find_by(id: user_id)
         end
