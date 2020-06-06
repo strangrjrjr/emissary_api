@@ -10,6 +10,7 @@ class MessagesChannel < ApplicationCable::Channel
     
     if @user
       if @conversation.users.include?(@user)
+        # doesn't hit the controller's create at all
         @message = Message.create(text: data["text"], user_id: @user.id, conversation_id: @conversation.id)
         ActionCable.server.broadcast("conversation_channel_#{@conversation.id}", @message)
       end

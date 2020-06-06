@@ -1,3 +1,4 @@
 class ConversationSerializer < ActiveModel::Serializer
-  attributes :id, :title, :topic, :private
+  # tried adding users and messages
+  attributes :id, :title, :topic, :private, :users, :messages
 end
