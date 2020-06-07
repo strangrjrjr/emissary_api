@@ -7,10 +7,9 @@ class MessagesChannel < ApplicationCable::Channel
   def receive(data)
     @user = User.find(JWT.decode(data["user_id"], 'secret', true, algorithm: 'HS256')[0]["user_id"])
     @conversation = Conversation.find(data["conversation_id"])
-    
+ 
     if @user
       if @conversation.users.include?(@user)
-        # doesn't hit the controller's create at all
         @message = Message.create(text: data["text"], user_id: @user.id, conversation_id: @conversation.id)
         ActionCable.server.broadcast("conversation_channel_#{@conversation.id}", @message)
       end

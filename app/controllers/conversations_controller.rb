@@ -13,6 +13,7 @@ class ConversationsController < ApplicationController
         if conversation.save
             # stripped = conversation.users {|user| user.id = nil}
             # create UserConversation here
+            UserConversation.create(user_id: current_user.id, conversation_id:conversation.id)
             serialized_convo = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
             # offload broadcast to job
             ActionCable.server.broadcast "conversations_channel", serialized_convo
