@@ -11,20 +11,19 @@ class ConversationsController < ApplicationController
     def create
         conversation = Conversation.new(conversation_params)
         if conversation.save
-            # stripped = conversation.users {|user| user.id = nil}
-            # create UserConversation here
             UserConversation.create(user_id: current_user.id, conversation_id:conversation.id)
             serialized_convo = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
             # offload broadcast to job
-            byebug
-            render json: serialized_convo
+            # RENDER JSON IS NOT WORKING; NEED TO FIGURE OUT WHY
+            # render json: serialized_convo
+            # BROADCAST DOES NOT UPDATE DOM, WHY?
             ActionCable.server.broadcast "conversations_channel", serialized_convo
             head :ok
         end
     end
 
     def delete
-        @conversation = Conversation.find(conversation_params)
+        @conversation = Conversation.find_by(params[:id])
         if @conversation.destroy
             render json: "DESTROYED"
         else
