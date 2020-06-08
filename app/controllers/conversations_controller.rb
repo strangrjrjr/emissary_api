@@ -10,13 +10,13 @@ class ConversationsController < ApplicationController
 
     def create
         conversation = Conversation.new(conversation_params)
-        byebug
         if conversation.save
             # stripped = conversation.users {|user| user.id = nil}
             # create UserConversation here
             UserConversation.create(user_id: current_user.id, conversation_id:conversation.id)
             serialized_convo = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
             # offload broadcast to job
+            byebug
             render json: serialized_convo
             ActionCable.server.broadcast "conversations_channel", serialized_convo
             head :ok
@@ -24,8 +24,12 @@ class ConversationsController < ApplicationController
     end
 
     def delete
-        conversation = Conversation.find(conversation_params)
-        conversation.destroy
+        @conversation = Conversation.find(conversation_params)
+        if @conversation.destroy
+            render json: "DESTROYED"
+        else
+            render json: 'ERROR'
+        end
     end
 
     private

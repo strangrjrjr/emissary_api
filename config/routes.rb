@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   post '/signup', to: 'users#create'
   post '/login', to: 'auth#create'
   get '/home', to: 'auth#show'
-  
+  delete '/conversations', to: 'conversations#delete'
   resources :messages, only: [:create]
   resources :conversations, only: [:index, :create, :delete]
   mount ActionCable.server => '/cable'
