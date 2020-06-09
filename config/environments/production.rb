@@ -102,4 +102,8 @@ Rails.application.configure do
   # config.active_record.database_selector = { delay: 2.seconds }
   # config.active_record.database_resolver = ActiveRecord::Middleware::DatabaseSelector::Resolver
   # config.active_record.database_resolver_context = ActiveRecord::Middleware::DatabaseSelector::Resolver::Session
+
+  config.web_socket_server_url = 'wss://emissary-chat.herokuapp.com/cable'
+  config.action_cable.allowed_request_origins = ['https://objective-lamport-f498dc.netlify.app']
+
 end
