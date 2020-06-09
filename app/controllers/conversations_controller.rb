@@ -12,7 +12,7 @@ class ConversationsController < ApplicationController
         conversation = Conversation.new(conversation_params)
         if conversation.save
             UserConversation.create(user_id: current_user.id, conversation_id:conversation.id)
-           params["users"].each do |user|
+           params["conversation"]["users"].each do |user|
                 if (user["id"] != current_user.id)
                     UserConversation.create(user_id: user["id"], conversation_id: conversation.id)
                 end
