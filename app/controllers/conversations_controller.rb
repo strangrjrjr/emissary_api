@@ -12,6 +12,11 @@ class ConversationsController < ApplicationController
         conversation = Conversation.new(conversation_params)
         if conversation.save
             UserConversation.create(user_id: current_user.id, conversation_id:conversation.id)
+           params["users"].each do |user|
+                if (user["id"] != current_user.id)
+                    UserConversation.create(user_id: user["id"], conversation_id: conversation.id)
+                end
+            end
             serialized_convo = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
             # offload broadcast to job
             # RENDER JSON IS NOT WORKING; NEED TO FIGURE OUT WHY
@@ -23,17 +28,17 @@ class ConversationsController < ApplicationController
     end
 
     def delete
-        @conversation = Conversation.find_by(params[:id])
+        @conversation = Conversation.find_by(conversation_params)
         if @conversation.destroy
-            render json: "DESTROYED"
+            render json: {response: "DESTROYED"}
         else
-            render json: 'ERROR'
+            render json: {response: 'ERROR'}
         end
     end
 
     private
 
         def conversation_params
-            params.require(:conversation).permit(:id, :title, :topic, :private)
+            params.require(:conversation).permit(:id, :title, :topic, :private, :users => [])
         end
 end

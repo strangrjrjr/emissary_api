@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  # resources :users, only: [:create]
+  resources :users, only: [:index]
+  post '/new', to: 'conversations#create'
   post '/signup', to: 'users#create'
   post '/login', to: 'auth#create'
   get '/home', to: 'auth#show'

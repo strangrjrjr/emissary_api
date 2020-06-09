@@ -8,8 +8,9 @@ class ConversationsChannel < ApplicationCable::Channel
     byebug
     @user = User.find(JWT.decode(data["user_id"], 'secret', true, algorithm: 'HS256')[0]["user_id"])
     @conversation = Conversation.create(data["title"], data["topic"])
-    # CREATE CONVERSATION
     # ADD USERS (VIA USERCONVERSATIONS)
+    @users = data["users"]
+    @users.each {|user| UserConversation.create(user_id: user.id, conversation_id: @conversation.id)}
     # BROADCAST TO CONVERSATIONS_CHANNEL
     if @user
     #   if @conversation.users.include?(@user)
