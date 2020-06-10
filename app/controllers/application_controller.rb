@@ -3,7 +3,7 @@ class ApplicationController < ActionController::API
 
     # CHANGE SECRET AND REMOVE TO ENV BEFORE PRODUCTION
     def encode_token(payload)
-        JWT.encode(payload, 'secret')
+        JWT.encode(payload, ENV['JWT_SECRET'])
     end
 
     def auth_header
@@ -17,7 +17,7 @@ class ApplicationController < ActionController::API
                 # headers: { 'Authorization': 'Bearer <token>' }
                 begin
                     # CHANGE SECRET AND REMOVE TO ENV BEFORE PRODUCTION
-                    JWT.decode(token, 'secret', true, algorithm: 'HS256')
+                    JWT.decode(token, ENV['JWT_SECRET'], true, algorithm: 'HS256')
                 rescue JWT::DecodeError
                     nil
                 end
