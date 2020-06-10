@@ -5,7 +5,7 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    @user = User.find(JWT.decode(data["user_id"], 'secret', true, algorithm: 'HS256')[0]["user_id"])
+    @user = User.find(JWT.decode(data["user_id"], ENV['JWT_SECRET'], true, algorithm: 'HS256')[0]["user_id"])
     @conversation = Conversation.find(data["conversation_id"])
  
     if @user

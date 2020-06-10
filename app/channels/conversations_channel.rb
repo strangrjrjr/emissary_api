@@ -6,7 +6,7 @@ class ConversationsChannel < ApplicationCable::Channel
   def receive(data)
     # do something similar to message receive
     byebug
-    @user = User.find(JWT.decode(data["user_id"], 'secret', true, algorithm: 'HS256')[0]["user_id"])
+    @user = User.find(JWT.decode(data["user_id"], ENV['JWT_SECRET'], true, algorithm: 'HS256')[0]["user_id"])
     @conversation = Conversation.create(data["title"], data["topic"])
     # ADD USERS (VIA USERCONVERSATIONS)
     @users = data["users"]
