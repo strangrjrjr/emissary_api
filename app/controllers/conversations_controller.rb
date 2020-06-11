@@ -19,8 +19,6 @@ class ConversationsController < ApplicationController
             end
             serialized_convo = ActiveModelSerializers::Adapter::Json.new(ConversationSerializer.new(conversation)).serializable_hash
             # offload broadcast to job
-            # RENDER JSON IS NOT WORKING; NEED TO FIGURE OUT WHY
-            # render json: serialized_convo
             # BROADCAST DOES NOT UPDATE DOM, WHY?
             ActionCable.server.broadcast "conversations_channel", serialized_convo
             head :ok

@@ -5,18 +5,19 @@ class ConversationsChannel < ApplicationCable::Channel
 
   def receive(data)
     # do something similar to message receive
-    byebug
     @user = User.find(JWT.decode(data["user_id"], 'secret', true, algorithm: 'HS256')[0]["user_id"])
-    @conversation = Conversation.create(data["title"], data["topic"])
-    # ADD USERS (VIA USERCONVERSATIONS)
-    @users = data["users"]
-    @users.each {|user| UserConversation.create(user_id: user.id, conversation_id: @conversation.id)}
     # BROADCAST TO CONVERSATIONS_CHANNEL
     if @user
-    #   if @conversation.users.include?(@user)
-    #     @message = Message.create(text: data["text"], user_id: @user.id, conversation_id: @conversation.id)
-        ActionCable.server.broadcast("conversations_channel", @conversation)
-    #   end
+      @conversation = Conversation.create(title: data["title"], topic: data["topic"])
+      # ADD USERS (VIA USERCONVERSATIONS)
+      UserConversation.create(user_id: @user.id, conversation_id: @conversation.id)
+      @users = data["users"]
+      @users.each do |user|
+        if (user["id"] != @user.id)
+            UserConversation.create(user_id: user["id"], conversation_id: @conversation.id)
+        end
+      end
+      ActionCable.server.broadcast("conversations_channel", @conversation)
     end
   end
 
