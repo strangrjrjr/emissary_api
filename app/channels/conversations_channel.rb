@@ -13,10 +13,7 @@ class ConversationsChannel < ApplicationCable::Channel
     @users.each {|user| UserConversation.create(user_id: user.id, conversation_id: @conversation.id)}
     # BROADCAST TO CONVERSATIONS_CHANNEL
     if @user
-    #   if @conversation.users.include?(@user)
-    #     @message = Message.create(text: data["text"], user_id: @user.id, conversation_id: @conversation.id)
         ActionCable.server.broadcast("conversations_channel", @conversation)
-    #   end
     end
   end
 
