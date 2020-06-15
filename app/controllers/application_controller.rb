@@ -17,7 +17,8 @@ class ApplicationController < ActionController::API
                 # headers: { 'Authorization': 'Bearer <token>' }
                 begin
                     # CHANGE SECRET AND REMOVE TO ENV BEFORE PRODUCTION
-                    JWT.decode(token, ENV['JWT_SECRET'], true, algorithm: 'HS256')
+                    leeway = 30
+                    JWT.decode(token, ENV['JWT_SECRET'], true, {exp_leeway: leeway, algorithm: 'HS256'})
                 rescue JWT::DecodeError
                     nil
                 end
