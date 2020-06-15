@@ -5,8 +5,8 @@ Rails.application.routes.draw do
   post '/login', to: 'auth#create'
   get '/home', to: 'auth#show'
   delete '/conversations', to: 'conversations#delete'
-  resources :messages, only: [:create]
-  resources :conversations, only: [:index, :create]
+  # resources :messages, only: [:create]
+  resources :conversations, only: [:index]
   mount ActionCable.server => '/cable'
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

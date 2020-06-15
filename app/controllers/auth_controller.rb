@@ -8,7 +8,7 @@ class AuthController < ApplicationController
         # one day for token
         @exp = Time.now.to_i + 86400
         token = encode_token({ user_id: @user.id, exp: @exp})
-        puts token
+        ActionCable.server.broadcast("appearances_channel", @user)
         render json: { user: UserSerializer.new(@user), jwt: token }, status: :accepted
       else
         render json: { message: 'Invalid username or password' }, status: :unauthorized
