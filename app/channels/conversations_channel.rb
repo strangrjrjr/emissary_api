@@ -10,7 +10,7 @@ class ConversationsChannel < ApplicationCable::Channel
     @conversation = Conversation.create(title: data["title"], topic: data["topic"])
     # ADD USERS (VIA USERCONVERSATIONS)
     @users = data["users"]
-    @users.each {|user| UserConversation.create(user_id: user.id, conversation_id: @conversation.id)}
+    @users.each {|user| UserConversation.create(user_id: user["id"], conversation_id: @conversation.id)}
     # BROADCAST TO CONVERSATIONS_CHANNEL
     if @user
         ActionCable.server.broadcast("conversations_channel", @conversation)
