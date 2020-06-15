@@ -5,7 +5,9 @@ class ConversationsChannel < ApplicationCable::Channel
 
   def receive(data)
     # do something similar to message receive
-    @user = User.find(JWT.decode(data["user_id"], 'secret', true, algorithm: 'HS256')[0]["user_id"])
+    # byebug
+    leeway = 30
+    @user = User.find(JWT.decode(data["user_id"], 'secret', true, {exp_leeway: leeway, algorithm: 'HS256'})[0]["user_id"])
     # BROADCAST TO CONVERSATIONS_CHANNEL
     if @user
       @conversation = Conversation.create(title: data["title"], topic: data["topic"])
