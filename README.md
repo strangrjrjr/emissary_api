@@ -26,7 +26,7 @@ This repo is the backend API companion to my React JS frontend, found [here](htt
 
 - [ ] Database encryption
 - [ ] Encrypted ActionCable broadcasts
-- [ ] Use ActionCable connection to handle CRUD operations for DB
+- [x] Use ActionCable connection to handle CRUD operations for DB
 - [ ] Use ActiveJob to handle broadcasts after commits to DB
 - [ ] Database logging/monitoring
 - [ ] Email verification
